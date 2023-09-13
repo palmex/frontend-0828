@@ -7,7 +7,11 @@ export default class Cars extends React.Component{
     constructor(props){
         super(props)
         this.state = {
+            
             make: "",
+            model: "",
+            year: "",
+            odometer: "",
             formState: "Submit",
             color: "",
             // "make", "model", "car_id", "year", "odometer"
@@ -25,19 +29,26 @@ export default class Cars extends React.Component{
     }
 
     // 2. functions that execute 
-    submit = () => {
+    submit = async () => {
+        console.log('state', this.state.make, this.state.model, this.state.year, this.state.odometer)
+        const newCar = await createNewCar(this.state.make, this.state.model, this.state.year, this.state.odometer)
+        console.log('car created', newCar)
         this.setState({formState: "Submitted!"})
     }
 
     // 3. rendering things 
 
     render(){
-        console.log("make", this.state.make)
+        // console.log("make", this.state.make)
+        // console.log("odometer", this.state.odometer)
         return(
             <View style={styles.container}>
                 <Text style={{color: this.props.carcolor, fontSize: "24px"}}>Car List</Text>
+                {/* nest all my cars from DB inside a scrollview */}
                 <ScrollView style={styles.list}>
+                    {/* iterate through car array passed back from Backend */}
                     {(this.state.data.map((car) => 
+                    // render each car 
                         <View key={car.car_id} style={styles.carbox}>
                             <Text style={{fontSize: "18px"}}>
                                 {car.year} {car.make} {car.model} 
@@ -51,11 +62,36 @@ export default class Cars extends React.Component{
                 </ScrollView>
                 <Text style={{fontSize: "24px"}}>New Car</Text>
                 <View style={styles.formView}>
+                    {/* form element 1 */}
                     <View>
                   <Text>Car Make</Text>  
                   <TextInput 
                     style={styles.formInput}
                     onChangeText={(e) => this.setState({make: e})}
+                  ></TextInput>
+                  </View>
+                  {/* form element 1 */}
+                  <View>
+                  <Text>Car Model</Text>  
+                  <TextInput 
+                    style={styles.formInput}
+                    onChangeText={(e) => this.setState({model: e})}
+                  ></TextInput>
+                  </View>
+                  {/* form element 1 */}
+                  <View>
+                  <Text>Car Year</Text>  
+                  <TextInput 
+                    style={styles.formInput}
+                    onChangeText={(e) => this.setState({year: e})}
+                  ></TextInput>
+                  </View>
+                  {/* form element 1 */}
+                  <View>
+                  <Text>Car Odometer</Text>  
+                  <TextInput 
+                    style={styles.formInput}
+                    onChangeText={(e) => this.setState({odometer: e})}
                   ></TextInput>
                   </View>
                 </View>
@@ -66,6 +102,45 @@ export default class Cars extends React.Component{
     }
 
 }
+
+
+
+async function createNewCar(make, model, year, odometer){
+    let reqBody = {
+        "make": make,
+        "model": model,
+        "year": year,
+        "odometer": odometer
+    }
+    console.log(JSON.stringify(reqBody))
+
+    return fetch('http://localhost:3000/cars/new',{
+        method:'POST',
+        withCredentials: true,
+        body: JSON.stringify(reqBody),
+        headers:{
+            "Content-Type": "application/json",
+            'Access-Control-Allow-Origin':'http://localhost:3000/*',
+            'Access-Control-Allow-Headers':'*',
+            'Accept': 'application/json'
+        }}).then(response => {
+            if(response.ok){
+                const newCar = response.json()
+                console.log(newCar)
+                return newCar
+            } else {
+                console.log('response not okay', response.status, response.statusText)
+                var error = new Error(response.status + ':' +  response.statusText)
+                error.response = response
+                return error
+            }
+           
+        }, error => {
+            var errmess = new Error(error.message)
+            throw errmess
+        })
+}
+
 
 async function fetchCars(){
     return fetch('http://localhost:3000/cars/all',{
