@@ -34,12 +34,15 @@ export default class Cars extends React.Component{
     render(){
         return(
             <View style={styles.container}>
-                <Text style={{color: this.props.carcolor}}>Car Component</Text>
+                <Text style={{color: this.props.carcolor, fontSize: "24px"}}>Car List</Text>
                 <ScrollView style={styles.list}>
                     {(this.state.data.map((car) => 
-                        <View key={car.car_id}>
+                        <View key={car.car_id} style={styles.carbox}>
+                            <Text style={{fontSize: "18px"}}>
+                                {car.year} {car.make} {car.model} 
+                            </Text>
                             <Text>
-                                {car.make}
+                            {car.odometer} miles
                             </Text>
                         </View>
                     ))}
@@ -86,9 +89,21 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    carbox: {
+        flex: 1,
+        backgroundColor: '#eeeee4',
+        minHeight: "25px",
+        margin: "5px",
+        padding: "5px",
+        alignItems: 'center',
+        borderRadius: "5px",
+        justifyContent: 'center',
+      },
     list: {
         flex: 1,
         backgroundColor: '#aaa',
+        margin: "15px",
+        padding: "15px",
         borderColor: "#000",
         borderStyle: "solid",
         borderWidth: "1px",
