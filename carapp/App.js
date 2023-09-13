@@ -6,7 +6,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
-      <Cars></Cars>
+      <Cars carcolor="#0fff0f"></Cars>
+      <Cars carcolor="#efbf7f"></Cars>
       <StatusBar style="auto" />
     </View>
   );
