@@ -1,5 +1,5 @@
 import React from "react"
-import {StyleSheet, View, Text, Button} from "react-native"
+import {StyleSheet, View, Text, Button, ScrollView} from "react-native"
 
 export default class Cars extends React.Component{
 
@@ -24,6 +24,7 @@ export default class Cars extends React.Component{
         return(
             <View style={styles.container}>
                 <Text style={{color: this.props.carcolor}}>Car Component</Text>
+                <ScrollView style={styles.list}></ScrollView>
                 <Button onPress={this.buttonClicked} title={this.state.testState}></Button>
             </View>
         )
@@ -38,4 +39,16 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    list: {
+        flex: 1,
+        backgroundColor: '#aaa',
+        borderColor: "#000",
+        borderStyle: "solid",
+        borderWidth: "1px",
+        minHeight: "300px",
+        maxHeight: "50%",
+        borderRadius: "10px",
+        minWidth: "100px"
+        
+      }
   });
