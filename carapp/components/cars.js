@@ -1,5 +1,5 @@
 import React from "react"
-import {StyleSheet, View, Text, Button, ScrollView} from "react-native"
+import {StyleSheet, View, Text, Button, ScrollView, TextInput} from "react-native"
 
 export default class Cars extends React.Component{
 
@@ -8,7 +8,7 @@ export default class Cars extends React.Component{
         super(props)
         this.state = {
             make: "",
-            testState: "Click Me!",
+            formState: "Submit",
             color: "",
             // "make", "model", "car_id", "year", "odometer"
             data: []
@@ -25,13 +25,14 @@ export default class Cars extends React.Component{
     }
 
     // 2. functions that execute 
-    buttonClicked = () => {
-        this.setState({testState: "Clicked!"})
+    submit = () => {
+        this.setState({formState: "Submitted!"})
     }
 
     // 3. rendering things 
 
     render(){
+        console.log("make", this.state.make)
         return(
             <View style={styles.container}>
                 <Text style={{color: this.props.carcolor, fontSize: "24px"}}>Car List</Text>
@@ -48,7 +49,18 @@ export default class Cars extends React.Component{
                     ))}
                     
                 </ScrollView>
-                <Button onPress={this.buttonClicked} title={this.state.testState}></Button>
+                <Text style={{fontSize: "24px"}}>New Car</Text>
+                <View style={styles.formView}>
+                    <View>
+                  <Text>Car Make</Text>  
+                  <TextInput 
+                    style={styles.formInput}
+                    onChangeText={(e) => this.setState({make: e})}
+                  ></TextInput>
+                  </View>
+                </View>
+                
+                <Button onPress={this.submit} title={this.state.formState}></Button>
             </View>
         )
     }
@@ -88,6 +100,13 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
+      minWidth: "90%"
+    },
+    formInput:{
+        borderColor: "#000",
+        borderStyle: "solid",
+        borderWidth: "1px",
+        minHeight: "15px"
     },
     carbox: {
         flex: 1,
@@ -110,7 +129,23 @@ const styles = StyleSheet.create({
         minHeight: "300px",
         maxHeight: "50%",
         borderRadius: "10px",
-        minWidth: "100px"
+        minWidth: "70%",
+        maxWidth: "90%"
+        
+      },
+      formView: {
+        flex: 1,
+        backgroundColor: '#fff',
+        margin: "15px",
+        padding: "15px",
+        borderColor: "#000",
+        borderStyle: "solid",
+        borderWidth: "1px",
+        minHeight: "300px",
+        maxHeight: "50%",
+        borderRadius: "10px",
+        minWidth: "70%",
+        maxWidth: "90%"
         
       }
   });
