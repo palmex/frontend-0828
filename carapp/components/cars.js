@@ -9,8 +9,19 @@ export default class Cars extends React.Component{
         this.state = {
             make: "",
             testState: "Click Me!",
-            color: ""
+            color: "",
+            // "make", "model", "car_id", "year", "odometer"
+            data: []
         }
+    }
+
+    async componentDidMount(){
+        console.log('component did mount')
+        // this is where I want to make my api call
+        const response = await fetchCars()
+        console.log(response)
+        // this.setState({data: response})
+
     }
 
     // 2. functions that execute 
@@ -24,12 +35,36 @@ export default class Cars extends React.Component{
         return(
             <View style={styles.container}>
                 <Text style={{color: this.props.carcolor}}>Car Component</Text>
-                <ScrollView style={styles.list}></ScrollView>
+                <ScrollView style={styles.list}>
+                    {(this.state.data.map((car) => 
+                        <View key={car.car_id}>
+                            <Text>
+                                {car.make}
+                            </Text>
+                        </View>
+                    ))}
+                    
+                </ScrollView>
                 <Button onPress={this.buttonClicked} title={this.state.testState}></Button>
             </View>
         )
     }
 
+}
+
+async function fetchCars(){
+    return fetch('http://localhost:3000/cars/all',{
+        method:'GET',
+        withCredentials: true,
+        headers:{
+            'admin':'true',
+            'Access-Control-Allow-Origin':'http://localhost:3000/*',
+            'Access-Control-Allow-Headers':'*',
+            'Accept': 'application/json'
+        }}).then(response => {
+            console.log(response)
+            return response
+        })
 }
 
 const styles = StyleSheet.create({
