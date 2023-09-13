@@ -20,7 +20,7 @@ export default class Cars extends React.Component{
         // this is where I want to make my api call
         const response = await fetchCars()
         console.log(response)
-        // this.setState({data: response})
+        this.setState({data: response})
 
     }
 
@@ -62,8 +62,20 @@ async function fetchCars(){
             'Access-Control-Allow-Headers':'*',
             'Accept': 'application/json'
         }}).then(response => {
-            console.log(response)
-            return response
+            if(response.ok){
+                const cars = response.json()
+                console.log(cars)
+                return cars
+            } else {
+                console.log('response not okay', response.status, response.statusText)
+                var error = new Error(response.status + ':' +  response.statusText)
+                error.response = response
+                return error
+            }
+           
+        }, error => {
+            var errmess = new Error(error.message)
+            throw errmess
         })
 }
 
